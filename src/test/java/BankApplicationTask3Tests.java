@@ -1,4 +1,5 @@
 import com.luxoft.bankapp.model.*;
+import com.luxoft.bankapp.service.BankReportServiceImpl;
 import com.luxoft.bankapp.service.Banking;
 import com.luxoft.bankapp.service.BankingImpl;
 import com.luxoft.bankapp.service.storage.ClientRepository;
@@ -13,6 +14,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.PropertySource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+
+import java.lang.annotation.Annotation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,26 +61,7 @@ public class BankApplicationTask3Tests {
     @BeforeEach
     public void init() {
 
-        try {
-            BankApplication.class.getMethod("initialize", ApplicationContext.class).invoke(null, applicationContext);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // ignore
-        }
-
-        // TODO you can replace code above with this when will have the method
-//        BankApplication.initialize(applicationContext);
-    }
-
-    @Test
-    public void placeholderConfigurerBeanConfiguration() {
-        assertNotNull(placeholderConfigurer, "placeholderConfigurer bean should be configured");
-
-        PropertySource<?> localProperties = placeholderConfigurer.getAppliedPropertySources().get("localProperties");
-        assertNotNull(localProperties, "You should configure PropertySourcesPlaceholderConfigurer bean");
-
-        assertEquals("Jonny Bravo", localProperties.getProperty("client1"));
-        assertEquals("Adam Budzinski", localProperties.getProperty("client2"));
+        BankApplication.initialize(applicationContext);
     }
 
     @Test
@@ -90,7 +74,18 @@ public class BankApplicationTask3Tests {
     @Test
     public void bankingBeanConfiguration() {
         assertNotNull(banking, "banking bean should be configured");
-        assertTrue((banking instanceof BankingImpl), "storage should be instantiated with BankingImpl class");
+        assertTrue((banking instanceof BankingImpl), "banking should be instantiated with BankingImpl class");
+    }
+
+    @Test
+    public void placeholderConfigurerBeanConfiguration() {
+        assertNotNull(placeholderConfigurer, "placeholderConfigurer bean should be configured");
+
+        PropertySource<?> localProperties = placeholderConfigurer.getAppliedPropertySources().get("localProperties");
+        assertNotNull(localProperties, "You should configure PropertySourcesPlaceholderConfigurer bean");
+
+        assertEquals("Jonny Bravo", localProperties.getProperty("client1"));
+        assertEquals("Adam Budzinski", localProperties.getProperty("client2"));
     }
 
     @Test

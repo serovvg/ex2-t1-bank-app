@@ -5,12 +5,28 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="repository" class="com.luxoft.bankapp.service.storage.MapClientRepository" />
-
-    <bean id="banking" class="com.luxoft.bankapp.service.BankingImpl" autowire="byType"/>
-
-    <bean id="bankReport" class="com.luxoft.bankapp.service.BankReportServiceImpl">
-        <property name="repository" ref="repository"/>
+    <bean id="savingAccount1" class="com.luxoft.bankapp.model.SavingAccount">
+        <constructor-arg name="initialBalance" value="1000"/>
     </bean>
 
+    <bean id="checkingAccount1" class="com.luxoft.bankapp.model.CheckingAccount">
+        <constructor-arg name="overdraft" value="1000"/>
+    </bean>
+
+    <bean id="client1" class="com.luxoft.bankapp.model.Client">
+
+        <constructor-arg name="name" value="Jonny Bravo"/>
+        <constructor-arg name="gender" value="MALE"/>
+
+        <property name="repository" ref="repository"/>
+
+        <property name="city" value="Moscow"/>
+
+        <property name="accounts">
+            <set>
+                <ref bean="savingAccount1"/>
+                <ref bean="checkingAccount1"/>
+            </set>
+        </property>
+    </bean>
 </beans>
